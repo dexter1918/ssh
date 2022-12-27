@@ -1,3 +1,26 @@
+var i = 0;
+
+function move() {
+  if (i == 0) {
+    i = 1;
+    var elem = document.getElementById("myBar");
+    elem.style.display = "block";
+    var width = 1;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        i = 0;
+      } else {
+        width++;
+        elem.style.width = width + "%";
+      }
+    }
+    // var elem = document.getElementById("myBar");
+    // elem.style.display = "none";
+  }
+}
+
 function validateForm() {
     let x = document.getElementById("snorlax").value == "" ||
             document.getElementById("heatran").value == "" ||
@@ -20,11 +43,17 @@ function abc() {
     var snorlax = document.getElementById("snorlax").value;
     var heatran = document.getElementById("heatran").value;
     var lucario = document.getElementById("lucario").value;
+    var gibleChkBox = document.getElementById("gible");
+    
+    if (gibleChkBox.checked == true)
+      var gible = "Y";
+    else
+      var gible = "N";
+
+    // console.log(gible);
 
     // console.log(formData.get("snorlax"));
     // console.log(formData.get("lucario"));
-
-    const gible = "";
 
     const encodedToken = window.btoa(snorlax + ":" + lucario);
 
@@ -43,7 +72,10 @@ function abc() {
         .then(result => {
             resp = result;
             // console.log(resp);
+            move();
             document.getElementById("ert").innerHTML = JSON.stringify(resp);
+            // var elem = document.getElementById("myBar");
+            // elem.style.display = "none";
         })
         .catch(error => console.log('error', error));
 }
