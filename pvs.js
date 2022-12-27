@@ -1,5 +1,12 @@
 var i = 0;
 
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("myBtn").click();
+  }
+});
+
 function move() {
   if (i == 0) {
     i = 1;
