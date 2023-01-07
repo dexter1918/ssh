@@ -1,9 +1,65 @@
 var i = 0;
 
-input.addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("myBtn").click();
+/////////////////////////////////////////////////////////////////////
+function refreshPage() {
+  window.location.reload();
+}
+setInterval(refreshPage, 60000); // refresh the page every 60 seconds
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+// var input1 = document.getElementById('snorlax');
+// var input2 = document.getElementById('heatran');
+// var input3 = document.getElementById('lucario');
+// var isEnteringText = false;
+
+// input1.addEventListener('focus', function() {
+//   isEnteringText = true;
+// });
+
+// input1.addEventListener('blur', function() {
+//   isEnteringText = false;
+// });
+
+// input2.addEventListener('focus', function() {
+//   isEnteringText = true;
+// });
+
+// input2.addEventListener('blur', function() {
+//   isEnteringText = false;
+// });
+
+// input3.addEventListener('focus', function() {
+//   isEnteringText = true;
+// });
+
+// input3.addEventListener('blur', function() {
+//   isEnteringText = false;
+// });
+
+// setInterval(function() {
+//   if (!isEnteringText) {
+//     location.reload();
+//   }
+// }, 90000);
+
+/////////////////////////////////////////////////////////////////////
+
+function validateForm() {
+  let x = document.getElementById("snorlax").value == "" ||
+    document.getElementById("heatran").value == "" ||
+    document.getElementById("lucario").value == ""
+
+  if (x == true) {
+    alert("Be careful with it, man!");
+    return false;
+  }
+}
+
+document.addEventListener('keydown', function (event) {
+  if (event.code === 'Enter') {
+    document.getElementById('myBtn').click();
+    document.getElementById('myBtn').style.backgroundColor = "grey";
   }
 });
 
@@ -23,68 +79,47 @@ function move() {
         elem.style.width = width + "%";
       }
     }
-    // var elem = document.getElementById("myBar");
-    // elem.style.display = "none";
   }
 }
 
-function validateForm() {
-    let x = document.getElementById("snorlax").value == "" ||
-            document.getElementById("heatran").value == "" ||
-            document.getElementById("lucario").value == ""
-
-    if (x == true) {
-      alert("Be careful with it, man!");
-      return false;
-    }
-  }
-
 function abc() {
 
-    var y = validateForm();
+  var y = validateForm();
 
-    if(y == false) return false;
+  if (y == false) return false;
 
-    var resp = {};
+  var resp = {};
 
-    var snorlax = document.getElementById("snorlax").value;
-    var heatran = document.getElementById("heatran").value;
-    var lucario = document.getElementById("lucario").value;
-    var gibleChkBox = document.getElementById("gible");
-    
-    if (gibleChkBox.checked == true)
-      var gible = "Y";
-    else
-      var gible = "N";
+  var snorlax = document.getElementById("snorlax").value;
+  var heatran = document.getElementById("heatran").value;
+  var lucario = document.getElementById("lucario").value;
+  var gibleChkBox = document.getElementById("gible");
 
-    // console.log(gible);
+  if (gibleChkBox.checked == true)
+    var gible = "Y";
+  else
+    var gible = "N";
 
-    // console.log(formData.get("snorlax"));
-    // console.log(formData.get("lucario"));
+  const encodedToken = window.btoa(snorlax + ":" + lucario);
 
-    const encodedToken = window.btoa(snorlax + ":" + lucario);
+  var myHeaders = new Headers();
+  myHeaders.append("charmander", lucario);
+  myHeaders.append("Authorization", "Basic " + encodedToken);
 
-    var myHeaders = new Headers();
-    myHeaders.append("charmander", lucario);
-    myHeaders.append("Authorization", "Basic " + encodedToken);
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
 
-    var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
-
-    fetch(`https://password-vault-sapi.us-e2.cloudhub.io/pvs/${heatran}?gible=${gible}`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            resp = result;
-            // console.log(resp);
-            move();
-            document.getElementById("ert").innerHTML = JSON.stringify(resp);
-            // var elem = document.getElementById("myBar");
-            // elem.style.display = "none";
-        })
-        .catch(error => console.log('error', error));
+  fetch(`https://password-vault-sapi.us-e2.cloudhub.io/pvs/${heatran}?gible=${gible}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      resp = result;
+      move();
+      document.getElementById("ert").innerHTML = JSON.stringify(resp);
+    })
+    .catch(error => console.log('error', error));
 }
 
 
